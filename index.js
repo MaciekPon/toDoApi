@@ -4,9 +4,10 @@ const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT;
 const { MongoClient } = require("mongodb");
-const client = new MongoClient(
-  "mongodb+srv://macia:Porniol1@todobase.yvbuw.mongodb.net/?retryWrites=true&w=majority&appName=todoBase"
-);
+const uri =
+  "mongodb+srv://macia:Porniol1@todobase.yvbuw.mongodb.net/?retryWrites=true&w=majority&appName=todoBase";
+
+const client = new MongoClient(uri);
 
 app.use(cors());
 app.use(express.json());
