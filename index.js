@@ -23,9 +23,9 @@ app.get("/", async function (req, res) {
     res.send(findResult);
   } catch (err) {
     console.error(err)
-  } finally {
+  } /*finally {
     await client.close();
-  }
+  }*/
 });
 
 app.post("/addTodo", async function (req, res) {
@@ -38,9 +38,9 @@ app.post("/addTodo", async function (req, res) {
     await collection.insertOne({ name });
   } catch (err) {
     console.error(err)
-  } finally {
+  }/* finally {
     await client.close();
-  }
+  }*/
   res.status(201).json({
     message: "Thing created successfilly!",
   });
