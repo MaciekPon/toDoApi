@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 const { MongoClient } = require("mongodb");
-const uri =
+const uri = process.env.MONGO_URI ||
   "mongodb+srv://macia:Porniol1@todobase.yvbuw.mongodb.net/?retryWrites=true&w=majority&appName=todoBase";
 
 const client = new MongoClient(uri);
@@ -18,11 +18,10 @@ app.get("/", async function (req, res) {
     const db = client.db("todoBase");
     const collection = db.collection("test");
 
-    // Find the first document in the collection
     const findResult = await collection.find().toArray();
+    console.log(findResult)
     res.send(findResult);
   } finally {
-    // Close the database connection when finished or an error occurs
     await client.close();
   }
 });
@@ -34,10 +33,8 @@ app.post("/addTodo", async function (req, res) {
     const collection = db.collection("test");
     const { name } = req.body;
 
-    // Find the first document in the collection
     await collection.insertOne({ name });
   } finally {
-    // Close the database connection when finished or an error occurs
     await client.close();
   }
   res.status(201).json({
