@@ -21,6 +21,8 @@ app.get("/", async function (req, res) {
     const findResult = await collection.find().toArray();
     console.log(findResult)
     res.send(findResult);
+  } catch (err) {
+    console.error(err)
   } finally {
     await client.close();
   }
@@ -34,6 +36,8 @@ app.post("/addTodo", async function (req, res) {
     const { name } = req.body;
 
     await collection.insertOne({ name });
+  } catch (err) {
+    console.error(err)
   } finally {
     await client.close();
   }
