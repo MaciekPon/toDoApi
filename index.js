@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT;
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const uri =
   "mongodb+srv://macia:Porniol1@todobase.yvbuw.mongodb.net/?retryWrites=true&w=majority&appName=todoBase";
 
@@ -16,28 +16,54 @@ app.get("/", async function (req, res) {
   try {
     await client.connect();
     const db = client.db("todoBase");
-    const collection = db.collection("test");
+    const collection = db.collection("todos");
 
-    // Find the first document in the collection
-    const findResult = await collection.find().toArray();
+    const findResult = (await collection.find().toArray()).sort(
+      (a, b) => a.isEnded - b.isEnded
+    );
     res.send(findResult);
-  } finally {
-    // Close the database connection when finished or an error occurs
+  } catch (err) {
+    console.log(err);
     await client.close();
   }
 });
+0;
 
 app.post("/addTodo", async function (req, res) {
   try {
     await client.connect();
     const db = client.db("todoBase");
-    const collection = db.collection("test");
+    const collection = db.collection("todos");
     const { name } = req.body;
 
-    // Find the first document in the collection
-    await collection.insertOne({ name });
-  } finally {
-    // Close the database connection when finished or an error occurs
+    const isEnded = false;
+    await collection.insertOne({ name, isEnded });
+  } catch (err) {
+    console.log(err);
+    await client.close();
+  }
+  res.status(201).json({
+    message: "Thing created successfilly!",
+  });
+});
+
+app.post("/checkTodo", async function (req, res) {
+  try {
+    await client.connect();
+    const db = client.db("todoBase");
+    const collection = db.collection("todos");
+    let { todoId } = req.body;
+
+    todoId = new ObjectId(todoId);
+
+    await collection.updateOne(
+      {
+        _id: todoId,
+      },
+      { $set: { isEnded: true } }
+    );
+  } catch (err) {
+    console.log(err);
     await client.close();
   }
   res.status(201).json({
