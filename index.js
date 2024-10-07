@@ -2,9 +2,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-const port = process.env.PORT;
-const { MongoClient, ObjectId } = require("mongodb");
+const port = process.env.PORT || 3001;
+const { MongoClient } = require("mongodb");
 const uri =
+  process.env.MONGO_URI ||
   "mongodb+srv://macia:Porniol1@todobase.yvbuw.mongodb.net/?retryWrites=true&w=majority&appName=todoBase";
 
 const client = new MongoClient(uri);
